@@ -1,0 +1,22 @@
+{
+  "name": "react-todolist",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "todolist"
+  ],
+  "author": "jiyinyiyong",
+  "license": "MIT",
+  "devDependencies": {
+    "mission": "0.0.6",
+    "shelljs": "^0.3.0"
+  },
+  "dependencies": {
+    "coffee-react-dom": "0.0.2"
+  }
+}
