@@ -1,7 +1,7 @@
 {
   "name": "react-todolist",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "React Todolist for learning purpose",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -18,5 +18,13 @@
   },
   "dependencies": {
     "coffee-react-dom": "0.0.2"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jiyinyiyong/react-todolist.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jiyinyiyong/react-todolist/issues"
+  },
+  "homepage": "https://github.com/jiyinyiyong/react-todolist"
 }

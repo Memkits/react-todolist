@@ -68,7 +68,7 @@ target.patch = ->
 target.rsync = ->
   mission.rsync
     file: './'
-    dest: 'tiye:~/repo/blog/'
+    dest: 'tiye:~/repo/react-todolist'
     options:
       exclude: [
         'node_modules/'
