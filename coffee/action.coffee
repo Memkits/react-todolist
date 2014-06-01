@@ -20,3 +20,6 @@ exports.action = action =
 
   toggle: (id) ->
     dispatcher.emit 'toggle', id
+
+  edit: (id, text) ->
+    dispatcher.emit 'emit', id, text
