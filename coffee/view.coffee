@@ -13,11 +13,17 @@ TodoItem = React.createClass
     text = event.target.value
     action.edit @props.data.id, text
 
+  remove: ->
+    action.remove @props.data.id
+
+  componentDidMount: ->
+    @refs.input.getDOMNode().focus()
+
   render: ->
     data = @props.data
     view = @
     if data.done
-      className = 'todo-item todo-done'
+      className = 'todo-item done'
     else
       className = 'todo-item'
     dom ->
@@ -28,9 +34,18 @@ TodoItem = React.createClass
           checked: data.done
           onChange: view.toggle
         @input
-          className: 'todo-text'
-          onBlur: view.edit
-          data.text
+          className: \
+            if data.text.trim().length > 0
+              'todo-text'
+            else
+              'todo-text empty'
+          onChange: view.edit
+          value: data.text
+          ref: 'input'
+        @button
+          className: 'todo-remove'
+          onClick: view.remove
+          'rm'
 
 TodoList = React.createClass
   displayName: 'TodoList'
@@ -47,15 +62,19 @@ TodoList = React.createClass
 
   render: ->
     list = @state.list.sort (item) ->
-      item.done
+      item.done + item.id
+    length = list.filter (item) ->
+      not item.done
+    .length
     todoNodes = list.map (item) =>
       TodoItem data: item, key: item.id
     view = @
     dom ->
-      @div className: 'page',
-        @div id: 'page',
-          @div id: 'add', onClick: view.add,
+      @div id: 'page',
+        @div @,
+          @span id: 'add', onClick: view.add,
             'Add'
+          @span id: 'count', length
         @div id: 'todo-list',
           todoNodes
 

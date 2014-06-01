@@ -9,5 +9,4 @@ html
     script (:src bower_components/react/react.js)
     script (:defer) (:src build/main.js)
 
-  body
-    #app
+  body#app

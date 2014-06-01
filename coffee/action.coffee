@@ -3,9 +3,10 @@
 
 id =
   _cache: 0
+  _date: (new Date).getTime()
   make: ->
     @_cache += 1
-    "_id#{@_cache}"
+    "_id#{@_date}-#{@_cache}"
 
 exports.action = action =
   add: ->
@@ -22,4 +23,4 @@ exports.action = action =
     dispatcher.emit 'toggle', id
 
   edit: (id, text) ->
-    dispatcher.emit 'emit', id, text
+    dispatcher.emit 'edit', id, text

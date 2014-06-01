@@ -24,11 +24,12 @@ store.toggle = (id) ->
       break
 
 store.add = (data) ->
-  @data.list.push data
+  @data.list.unshift data
 
 store.edit = (id, text) ->
   for item, index in @data.list
     if item.id is id
+      console.log 'item.text', text
       item.text = text
       break
 
@@ -49,4 +50,13 @@ dispatcher.on 'toggle', (id) ->
 
 dispatcher.on 'edit', (id, text) ->
   store.edit id, text
+  store.emit 'change'
+
+window.onbeforeunload = ->
+  raw = JSON.stringify store.data.list
+  localStorage.setItem 'react-todolist', raw
+
+try
+  raw = localStorage.getItem 'react-todolist'
+  store.data.list = (JSON.parse raw) or []
   store.emit 'change'
