@@ -1,8 +1,8 @@
 
-dom = require 'coffee-react-dom'
-
 {store} = require './store'
 {action} = require './action'
+
+$ = React.DOM
 
 TodoItem = React.createClass
   displayName: 'TodoItem'
@@ -20,32 +20,29 @@ TodoItem = React.createClass
     @refs.input.getDOMNode().focus()
 
   render: ->
-    data = @props.data
-    view = @
-    if data.done
+    if @props.data.done
       className = 'todo-item done'
     else
       className = 'todo-item'
-    dom ->
-      @div className: className,
-        @input
-          className: 'todo-done'
-          type: 'checkbox'
-          checked: data.done
-          onChange: view.toggle
-        @input
-          className: \
-            if data.text.trim().length > 0
-              'todo-text'
-            else
-              'todo-text empty'
-          onChange: view.edit
-          value: data.text
-          ref: 'input'
-        @button
-          className: 'todo-remove'
-          onClick: view.remove
-          'rm'
+    $.div className: className,
+      $.input
+        className: 'todo-done'
+        type: 'checkbox'
+        checked: @props.data.done
+        onChange: @toggle
+      $.input
+        className: \
+          if @props.data.text.trim().length > 0
+            'todo-text'
+          else
+            'todo-text empty'
+        onChange: @edit
+        value: @props.data.text
+        ref: 'input'
+      $.button
+        className: 'todo-remove'
+        onClick: @remove
+        'rm'
 
 TodoList = React.createClass
   displayName: 'TodoList'
@@ -68,14 +65,12 @@ TodoList = React.createClass
     .length
     todoNodes = list.map (item) =>
       TodoItem data: item, key: item.id
-    view = @
-    dom ->
-      @div id: 'page',
-        @div @,
-          @span id: 'add', onClick: view.add,
-            'Add'
-          @span id: 'count', length
-        @div id: 'todo-list',
-          todoNodes
+    $.div id: 'page',
+      $.div {},
+        $.span id: 'add', onClick: @add,
+          'Add'
+        $.span id: 'count', length
+      $.div id: 'todo-list',
+        todoNodes
 
 exports.TodoList = TodoList
