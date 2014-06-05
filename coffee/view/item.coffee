@@ -4,38 +4,21 @@
 exports.TodoItem = React.createClass
   displayName: 'TodoItem'
 
-  toggle: ->
-    store.toggle @props.data.id
   edit: (event) ->
-    text = event.target.value
-    store.edit @props.data.id, text
-
-  remove: ->
-    store.remove @props.data.id
+    text = event.currentTarget.value
+    store.edit @props.item.id, text
 
   componentDidMount: ->
     @refs.input.getDOMNode().focus()
 
   render: ->
-    isEempty = @props.data.text.trim().length is 0
-    isDone = @props.data.done
+    isEmpty = @props.item.text.trim().length is 0
     $.div
-      className: $.if isDone,
-        'todo-item done'
-        'todo-item'
+      className: 'todo-item'
       $.input
-        className: 'todo-done'
-        type: 'checkbox'
-        checked: @props.data.done
-        onChange: @toggle
-      $.input
-        className: $.if isEempty,
+        className: $.if isEmpty,
           'todo-text empty'
           'todo-text'
         onChange: @edit
-        value: @props.data.text
         ref: 'input'
-      $.button
-        className: 'todo-remove'
-        onClick: @remove
-        'rm'
+        @props.item.text

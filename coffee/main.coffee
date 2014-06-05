@@ -18,3 +18,8 @@ window.onbeforeunload = ->
 
 React.renderComponent (AppView {}),
   document.querySelector('#app')
+
+document.body.addEventListener 'keydown', (event) ->
+  if event.keyCode is 13
+    if event.currentTarget is document.body
+      store.add()
