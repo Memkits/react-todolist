@@ -1,19 +1,10 @@
 
 events = require 'events'
-uid = require './uid'
+uid = require './util/uid'
 
 exports.store = store = new events.EventEmitter
 
 store.data = list: []
-
-try
-  raw = localStorage.getItem 'react-todolist'
-  store.data.list = (JSON.parse raw) or []
-  store.emit 'change'
-
-window.onbeforeunload = ->
-  raw = JSON.stringify store.data.list
-  localStorage.setItem 'react-todolist', raw
 
 store.get = ->
   @data
