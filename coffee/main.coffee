@@ -1,5 +1,5 @@
 
-{TodoList} = require './view'
+{AppView} = require './view'
 
-React.renderComponent (TodoList {}),
+React.renderComponent (AppView {}),
   document.querySelector('#app')

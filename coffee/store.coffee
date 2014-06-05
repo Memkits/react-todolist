@@ -1,62 +1,49 @@
 
-
 events = require 'events'
+uid = require './uid'
 
-dispatcher = new events.EventEmitter
-store = new events.EventEmitter
+exports.store = store = new events.EventEmitter
 
-exports.dispatcher = dispatcher
-exports.store = store
+store.data = list: []
 
-store.data =
-  list: []
-
-store.remove = (id) ->
-  for item, index in @data.list
-    if item.id is id
-      @data.list.splice index, 1
-      break
-
-store.toggle = (id) ->
-  for item, index in @data.list
-    if item.id is id
-      item.done = not item.done
-      break
-
-store.add = (data) ->
-  @data.list.unshift data
-
-store.edit = (id, text) ->
-  for item, index in @data.list
-    if item.id is id
-      console.log 'item.text', text
-      item.text = text
-      break
-
-store.get = ->
-  @data
-
-dispatcher.on 'add', (data) ->
-  store.add data
-  store.emit 'change'
-
-dispatcher.on 'remove', (id) ->
-  store.remove id
-  store.emit 'change'
-
-dispatcher.on 'toggle', (id) ->
-  store.toggle id
-  store.emit 'change'
-
-dispatcher.on 'edit', (id, text) ->
-  store.edit id, text
+try
+  raw = localStorage.getItem 'react-todolist'
+  store.data.list = (JSON.parse raw) or []
   store.emit 'change'
 
 window.onbeforeunload = ->
   raw = JSON.stringify store.data.list
   localStorage.setItem 'react-todolist', raw
 
-try
-  raw = localStorage.getItem 'react-todolist'
-  store.data.list = (JSON.parse raw) or []
-  store.emit 'change'
+store.get = ->
+  @data
+
+store.remove = (id) ->
+  for item, index in @data.list
+    if item.id is id
+      @data.list.splice index, 1
+      @emit 'change'
+      break
+
+store.toggle = (id) ->
+  for item, index in @data.list
+    if item.id is id
+      item.done = not item.done
+      @emit 'change'
+      break
+
+store.add = (data) ->
+  data =
+    id: uid.make()
+    text: ''
+    done: no
+  @data.list.unshift data
+  @emit 'change'
+
+store.edit = (id, text) ->
+  for item, index in @data.list
+    if item.id is id
+      console.log 'item.text', text
+      item.text = text
+      @emit 'change'
+      break

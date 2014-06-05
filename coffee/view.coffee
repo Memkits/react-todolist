@@ -1,41 +1,47 @@
 
 {store} = require './store'
-{action} = require './action'
 
 $ = React.DOM
+$.if = (cond, a, b) ->
+  if cond then a else b
+
+Sidebar = React.createClass
+  displayName: 'Sidebar'
+  render: ->
+    $.div id: 'side-bar',
+      'Sidebar'
 
 TodoItem = React.createClass
   displayName: 'TodoItem'
 
   toggle: ->
-    action.toggle @props.data.id
+    store.toggle @props.data.id
   edit: (event) ->
     text = event.target.value
-    action.edit @props.data.id, text
+    store.edit @props.data.id, text
 
   remove: ->
-    action.remove @props.data.id
+    store.remove @props.data.id
 
   componentDidMount: ->
     @refs.input.getDOMNode().focus()
 
   render: ->
-    if @props.data.done
-      className = 'todo-item done'
-    else
-      className = 'todo-item'
-    $.div className: className,
+    isEempty = @props.data.text.trim().length is 0
+    isDone = @props.data.done
+    $.div
+      className: $.if isDone,
+        'todo-item done'
+        'todo-item'
       $.input
         className: 'todo-done'
         type: 'checkbox'
         checked: @props.data.done
         onChange: @toggle
       $.input
-        className: \
-          if @props.data.text.trim().length > 0
-            'todo-text'
-          else
-            'todo-text empty'
+        className: $.if isEempty,
+          'todo-text empty'
+          'todo-text'
         onChange: @edit
         value: @props.data.text
         ref: 'input'
@@ -47,7 +53,7 @@ TodoItem = React.createClass
 TodoList = React.createClass
   displayName: 'TodoList'
   add: ->
-    action.add()
+    store.add()
 
   getInitialState: ->
     @data = store.get()
@@ -73,4 +79,12 @@ TodoList = React.createClass
       $.div id: 'todo-list',
         todoNodes
 
-exports.TodoList = TodoList
+AppView = React.createClass
+  displayName: 'AppView'
+  render: ->
+
+    $.div id: 'app-view',
+      Sidebar {}
+      TodoList {}
+
+exports.AppView = AppView
