@@ -12,12 +12,17 @@ exports.TodoList = React.createClass
       @setState store.get()
 
   render: ->
-    list = @state.list.sort (item) ->
+    list = @state.list
+    .filter (item) =>
+      item.mode is @state.mode
+    .sort (item) =>
       item.done + item.id
     length = list.filter (item) ->
       not item.done
     .length
     todoNodes = list.map (item) =>
       TodoItem item: item, key: item.id
-    $.div id: 'list',
+    $.div
+      id: 'list'
+      onDragEnter: => store.unmark 'dest'
       todoNodes

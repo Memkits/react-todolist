@@ -27,7 +27,9 @@ exports.TodoItem = React.createClass
         onDragStart: (event) =>
           store.mark 'dragging', @props.item.id
         onDragEnd: (event) =>
-          store.unmark 'dragging', @props.item.id
+          store.move @props.item.id
+          store.unmark 'dragging'
+          store.unmark 'dest'
       $.input
         className: 'todo-text'
         ref: 'input'

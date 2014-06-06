@@ -65,10 +65,8 @@ store.count = (mode) ->
 
 store.mark = (key, id) ->
   @data[key] = id
-  console.log 'mark', key, id
   @emit 'change'
 
 store.unmark = (key) ->
   @data[key] = undefined
-  console.log 'unmark'
   @emit 'change'

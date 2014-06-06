@@ -9,7 +9,6 @@ body {
 
 #app {
     font-family: AppleGothic;
-    opacity: 0.2;
 }
 
 #app-view {
@@ -29,6 +28,10 @@ body {
     background: rgb(233, 233, 233);
     padding: 3px 13px;
     cursor: pointer;
+}
+
+#sidebar > .dest > * {
+    pointer-events: none;
 }
 
 #sidebar > *:active {
