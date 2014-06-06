@@ -2,6 +2,12 @@
 window.$ = $ = React.DOM
 $.if = (cond, a, b) ->
   if cond then a else b
+$.concat = (base, args...) ->
+  list = [base]
+  for item in args
+    if item?
+      list.push item
+  list.join ' '
 
 {AppView} = require './view/app'
 

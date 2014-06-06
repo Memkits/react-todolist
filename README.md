@@ -4,11 +4,9 @@ React Todolist
 
 Demo: http://repo.tiye.me/react-todolist/
 
-Implemented a simple todolist for learning purpose.
+A simple todolist based on React.
 
-It's heavily influence by Flux.
-
-![](http://ww4.sinaimg.cn/mw1024/62752320tw1egyo7wagztj20la07ndg0.jpg)
+![](http://ww4.sinaimg.cn/large/62752320tw1eh4u3vrpfpj21540ns42r.jpg)
 
 ### License
 

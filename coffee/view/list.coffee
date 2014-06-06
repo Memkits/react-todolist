@@ -22,7 +22,11 @@ exports.TodoList = React.createClass
     .length
     todoNodes = list.map (item) =>
       TodoItem item: item, key: item.id
+
     $.div
       id: 'list'
       onDragEnter: => store.unmark 'dest'
-      todoNodes
+      $.if (todoNodes.length > 0),
+        todoNodes
+        $.div id: 'placeholder',
+          'Press Enter to start...'

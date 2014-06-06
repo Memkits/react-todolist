@@ -8,64 +8,86 @@ body {
 }
 
 #app {
-    font-family: AppleGothic;
+    font-family: "Helvetica Neue";
+    background-image: url('http://jiyinyiyong.u.qiniudn.com/tulip.jpg');
+    background-image: url('../png/tulip.jpg');
+    background-size: cover;
+    font-weight: 100;
+    letter-spacing: 1px;
 }
 
 #app-view {
     position: absolute;
-    width: 100%;
+    width: 80%;
     height: 100%;
     display: flex;
+    right: 0;
+    padding-top: 60px;
+}
+
+#placeholder {
+    color: white;
+    font-size: 50px;
+    font-family: "Helvetica Neue";
+    font-weight: 100;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.38);
 }
 
 #sidebar {
-    padding: 70px;
+    padding-right: 150px;
+    padding-left: 50px;
 }
 
-#sidebar > * {
-    font-size: 26px;
-    margin: 10px 0;
-    background: rgb(233, 233, 233);
+#sidebar > .dest {
+    font-size: 23px;
+    margin-bottom: 25px;
+    background: rgba(161, 240, 205, 0.42);
     padding: 3px 13px;
     cursor: pointer;
+    box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.41);
+    color: white;
+}
+
+#sidebar > .highlight {
+    background: rgba(204, 82, 35, 0.28);
 }
 
 #sidebar > .dest > * {
     pointer-events: none;
 }
 
-#sidebar > *:active {
-    background-color: blue;
+#sidebar > .dest:active {
+    box-shadow: 1px 1px 4px black;
 }
 
 #sidebar > .drag-to {
-    background: rgb(255, 161, 233);
+    -webkit-transform: scale(1.2);
 }
 
 #sidebar .count {
     font-size: 40px;
-    margin-right: 20px;
+    margin-right: 13px;
 }
 
 #list {
-    padding-top: 70px;
+    flex: 1;
 }
 
 .todo-item {
-    width: 600px;
     display: flex;
-    margin: 10px 0;
-    box-shadow: 0 0 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+    margin-bottom: 10px;
 }
 
 .todo-item .drag {
     width: 120px;
-    background-color: rgb(228, 228, 255);
+    background-color: rgba(255, 255, 255, 0);
     cursor: move;
 }
 
 .todo-item .drag.dragging {
-    background-color: rgb(182, 182, 255);
+    background-color: rgba(0, 0, 0, 0.12);
 }
 
 .todo-text {
@@ -77,4 +99,9 @@ body {
     outline: none;
     border: none;
     margin: 0;
+    background-color: rgba(31, 31, 31, 0.23);
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.73);
+    font-family: Applegothic, "Hiragino Sans GB";
+    letter-spacing: 1px;
 }

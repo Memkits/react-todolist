@@ -77,4 +77,5 @@ target.rsync = ->
         'README.md'
         'js'
         '.git/'
+        'png/*.jpg'
       ]

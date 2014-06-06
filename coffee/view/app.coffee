@@ -6,7 +6,7 @@ AppView = React.createClass
   displayName: 'AppView'
   render: ->
     $.div id: 'app-view',
-      Sidebar {}
       TodoList {}
+      Sidebar {}
 
 exports.AppView = AppView
