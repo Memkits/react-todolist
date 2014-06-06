@@ -12,13 +12,13 @@ exports.TodoItem = React.createClass
     @refs.input.getDOMNode().focus()
 
   render: ->
-    isEmpty = @props.item.text.trim().length is 0
+
     $.div
       className: 'todo-item'
+      $.div
+        className: 'dragging'
       $.input
-        className: $.if isEmpty,
-          'todo-text empty'
-          'todo-text'
+        className: 'todo-text'
         onChange: @edit
         ref: 'input'
         @props.item.text

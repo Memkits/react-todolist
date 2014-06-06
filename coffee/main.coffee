@@ -21,5 +21,5 @@ React.renderComponent (AppView {}),
 
 document.body.addEventListener 'keydown', (event) ->
   if event.keyCode is 13
-    if event.currentTarget is document.body
+    if event.target is document.body
       store.add()
