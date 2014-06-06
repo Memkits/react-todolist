@@ -9,6 +9,7 @@ body {
 
 #app {
     font-family: AppleGothic;
+    opacity: 0.2;
 }
 
 #app-view {
@@ -27,6 +28,15 @@ body {
     margin: 10px 0;
     background: rgb(233, 233, 233);
     padding: 3px 13px;
+    cursor: pointer;
+}
+
+#sidebar > *:active {
+    background-color: blue;
+}
+
+#sidebar > .drag-to {
+    background: rgb(255, 161, 233);
 }
 
 #sidebar .count {
@@ -45,10 +55,14 @@ body {
     box-shadow: 0 0 2px;
 }
 
-.todo-item .dragging {
+.todo-item .drag {
     width: 120px;
     background-color: rgb(228, 228, 255);
     cursor: move;
+}
+
+.todo-item .drag.dragging {
+    background-color: rgb(182, 182, 255);
 }
 
 .todo-text {

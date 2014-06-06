@@ -7,8 +7,7 @@ exports.store = store = new events.EventEmitter
 store.data =
   list: []
   mode: 'todo' # 'later', 'done'
-  drag: undefined
-  sort: undefined
+  dragging: undefined
   dest: undefined
 
 store.get = ->
@@ -17,7 +16,7 @@ store.get = ->
 store.findIndex = (id) ->
   for item, index in @data.list
     if item.id is id
-      return id
+      return index
   throw new Error "item #{id} not found"
 
 store.findItem = (id) ->
@@ -36,15 +35,13 @@ store.move = (id) ->
       item.mode = @data.dest
       @emit 'change'
 
-store.sort = (id) ->
-  if @data.sort?
-    if @data.sort isnt id
-      item = @findItem id
-      index = @findIndex id
-      sortItem = @findItem @data.sort
-      sortIndex = @findIndex @data.sort
-      data[index] = sortItem
-      data[sortIndex] = item
+store.sort = (dest) ->
+  if @data.dragging?
+    if @data.dragging isnt dest
+      a = @findIndex @data.dragging
+      b = @findIndex dest
+      d = @data.list
+      [d[a], d[b]] = [d[b], d[a]]
       @emit 'change'
 
 store.add = ->
@@ -57,7 +54,7 @@ store.add = ->
   @emit 'change'
 
 store.edit = (id, text) ->
-  item = @findIndex id
+  item = @findItem id
   item.text = text
   @emit 'change'
 
@@ -65,3 +62,13 @@ store.count = (mode) ->
   @data.list.filter (item) =>
     item.mode is mode
   .length
+
+store.mark = (key, id) ->
+  @data[key] = id
+  console.log 'mark', key, id
+  @emit 'change'
+
+store.unmark = (key) ->
+  @data[key] = undefined
+  console.log 'unmark'
+  @emit 'change'

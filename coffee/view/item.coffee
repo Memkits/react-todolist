@@ -13,12 +13,28 @@ exports.TodoItem = React.createClass
 
   render: ->
 
+    isDragging = @props.item.id is store.get().dragging
+
     $.div
       className: 'todo-item'
+      onDragEnter: (event) =>
+        store.sort @props.item.id
       $.div
-        className: 'dragging'
+        className: $.if isDragging,
+          'drag dragging'
+          'drag'
+        draggable: yes
+        onDragStart: (event) =>
+          store.mark 'dragging', @props.item.id
+        onDragEnd: (event) =>
+          store.unmark 'dragging', @props.item.id
       $.input
         className: 'todo-text'
-        onChange: @edit
         ref: 'input'
-        @props.item.text
+        value: @props.item.text
+        onChange: (event) =>
+          store.edit @props.item.id, event.target.value
+        onBlur: (event) =>
+          text = event.target.value.trimLeft()
+          if text.length is 0
+            store.remove @props.item.id
