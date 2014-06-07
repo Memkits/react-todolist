@@ -9,14 +9,18 @@ exports.TodoItem = React.createClass
     store.edit @props.item.id, text
 
   componentDidMount: ->
-    @refs.input.getDOMNode().focus()
+    el = @refs.input.getDOMNode()
+    if el.value.trim().length is 0
+      el.focus()
 
   render: ->
 
     isDragging = @props.item.id is store.get().dragging
 
     $.div
-      className: 'todo-item'
+      className: $.if isDragging,
+        'todo-item dragging'
+        'todo-item'
       onDragEnter: (event) =>
         store.sort @props.item.id
       $.input
@@ -30,9 +34,7 @@ exports.TodoItem = React.createClass
           if text.length is 0
             store.remove @props.item.id
       $.div
-        className: $.if isDragging,
-          'drag dragging'
-          'drag'
+        className: 'drag'
         draggable: yes
         onDragStart: (event) =>
           store.mark 'dragging', @props.item.id

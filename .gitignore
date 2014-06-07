@@ -4,5 +4,6 @@ build/
 js/
 node_modules/
 png/
+data/
 
 index.html
