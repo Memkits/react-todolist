@@ -16,6 +16,7 @@ exports.Sidebar = React.createClass
     countDone = store.count 'done'
     dest = store.get().dest
     mode = store.get().mode
+    isDragging = store.get().dragging?
 
     $.div
       id: 'sidebar'
@@ -24,6 +25,7 @@ exports.Sidebar = React.createClass
         className: $.concat 'dest',
           if dest is 'todo' then 'drag-to'
           if mode is 'todo' then 'highlight'
+          if isDragging then 'is-dragging'
         onClick: => store.mark 'mode', 'todo'
         onDragEnter: => store.mark 'dest', 'todo'
         $.span

@@ -53,6 +53,10 @@ body {
     background: rgba(204, 82, 35, 0.28);
 }
 
+#sidebar > .highlight.is-dragging {
+    opacity: 0.2;
+}
+
 #sidebar > .dest > * {
     pointer-events: none;
 }
@@ -66,7 +70,7 @@ body {
 }
 
 #sidebar > .drag-to.highlight {
-    -webkit-transform: scale(0.8);
+    -webkit-transform: scale(1);
 }
 
 #sidebar .count {
@@ -81,6 +85,7 @@ body {
     margin-top: 62px;
     margin-bottom: 400px;
     padding: 8px;
+    overflow-x: hidden;
 }
 
 .todo-item {
