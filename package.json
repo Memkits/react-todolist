@@ -13,7 +13,7 @@
   "author": "jiyinyiyong",
   "license": "MIT",
   "devDependencies": {
-    "mission": "0.0.6",
+    "mission": "0.0.7",
     "shelljs": "^0.3.0"
   },
   "dependencies": {},

@@ -9,8 +9,6 @@ body {
 
 #app {
     font-family: "Helvetica Neue";
-    background-image: url('http://jiyinyiyong.u.qiniudn.com/tulip.jpg');
-    background-image: url('../png/tulip.jpg');
     background-size: cover;
     font-weight: 100;
     letter-spacing: 1px;
