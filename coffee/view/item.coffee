@@ -33,6 +33,9 @@ exports.TodoItem = React.createClass
           text = event.target.value.trimLeft()
           if text.length is 0
             store.remove @props.item.id
+        onKeyDown: (event) =>
+          if event.keyCode is 27
+            @blurEl()
       $.div
         className: 'drag'
         draggable: yes
@@ -42,3 +45,6 @@ exports.TodoItem = React.createClass
           store.move @props.item.id
           store.unmark 'dragging'
           store.unmark 'dest'
+
+  blurEl: ->
+    @refs.input.getDOMNode().blur()
