@@ -31,8 +31,10 @@ store.remove = (id) ->
 store.move = (id) ->
   if @data.dest?
     if @data.dest isnt @data.mode
-      item = @findItem id
+      index = @findIndex id
+      item = @data.list.splice(index, 1)[0]
       item.mode = @data.dest
+      @data.list.unshift item
       @emit 'change'
 
 store.sort = (dest) ->

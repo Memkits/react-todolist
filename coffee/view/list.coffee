@@ -15,8 +15,6 @@ exports.TodoList = React.createClass
     list = @state.list
     .filter (item) =>
       item.mode is @state.mode
-    .sort (item) =>
-      item.done + item.id
     length = list.filter (item) ->
       not item.done
     .length
