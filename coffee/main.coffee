@@ -1,5 +1,7 @@
 
-window.$ = $ = React.DOM
+React = require 'react'
+$ = React.DOM
+
 $.if = (cond, a, b) ->
   if cond then a else b
 $.concat = (base, args...) ->

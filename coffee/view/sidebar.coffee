@@ -1,4 +1,7 @@
 
+React = require 'react'
+$ = React.DOM
+
 {store} = require '../store'
 
 exports.Sidebar = React.createClass

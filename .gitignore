@@ -1,9 +1,10 @@
 
 bower_components/
-build/
-js/
 node_modules/
-png/
+
+build/
+dist/
 data/
+png/
 
 index.html

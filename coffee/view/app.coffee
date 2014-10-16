@@ -1,4 +1,7 @@
 
+React = require 'react'
+$ = React.DOM
+
 {Sidebar} = require './sidebar'
 {TodoList} = require './list'
 

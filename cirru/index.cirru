@@ -5,14 +5,16 @@ html
   head
     title Todolist
     meta (:charset utf-8)
-    link (:rel stylesheet) (:href css/style.css)
+    script(:src dist/vendor.min.js)
     link (:rel icon) (:href png/do.png)
-    @if (@ inDev) $ @block
-      link (:rel stylesheet) (:href css/resource-dev.css)
-      script (:src bower_components/react/react.js)
-    @if (@ inBuild) $ @block
-      link (:rel stylesheet) (:href css/resource-build.css)
-      script (:src http://cdn.staticfile.org/react/0.10.0/react.min.js)
-    script (:defer) (:src build/main.js)
+    @if (@ dev)
+      @block
+        link (:rel stylesheet) (:href css/main.css)
+        link (:rel stylesheet) (:href css/dev.css)
+        script (:defer) (:src build/main.js)
+      @block
+        link (:rel stylesheet) (:href dist/main.min.css)
+        link (:rel stylesheet) (:href css/build.css)
+        script (:defer) (:src dist/main.min.js)
 
   body#app
