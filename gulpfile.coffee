@@ -141,7 +141,7 @@ gulp.task 'rsync', ->
     src: '.'
     recursive: true
     args: ['--verbose']
-    dest: "tiye:~/repo/noisy-chat"
+    dest: "tiye:~/repo/react-todolist"
     deleteAll: yes
     exclude: [
       'bower_components/'
@@ -151,7 +151,6 @@ gulp.task 'rsync', ->
       '.npmignore'
       'README.md'
       'coffee/'
-      'css/'
       'build/'
       'gulpfile.coffee'
       '*.json'

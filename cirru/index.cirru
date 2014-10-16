@@ -17,4 +17,4 @@ html
         link (:rel stylesheet) (:href css/build.css)
         script (:defer) (:src dist/main.min.js)
 
-  body#app
+  body

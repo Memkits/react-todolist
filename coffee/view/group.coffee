@@ -2,25 +2,48 @@
 React = require 'react'
 $ = React.DOM
 
-{store} = require '../store'
+store = require '../store'
 
 module.exports = React.createClass
   displayName: 'Group'
 
+  changeMode: ->
+    @props.changeMode @props.name
+
+  getInitialState: ->
+    dragOver: no
+
+  onDragEnter: ->
+    @setState dragOver: yes
+
+  onDragLeave: ->
+    @setState dragOver: no
+
+  onDragOver: (event) ->
+    event.preventDefault()
+
+  onDrop: ->
+    store.move @props.dragging, @props.name
+    @setState dragOver: no
+
   render: ->
-    dest = store.get().dest
-    mode = store.get().mode
-    isDragging = store.get().dragging?
+
+    size = @props.data
+    .filter (item) =>
+      item.mode is @props.name
+    .length
 
     $.div
       id: @props.name
       className: $.concat 'dest',
-        if dest is @props.name then 'drag-to'
-        if mode is @props.name then 'highlight'
-        if isDragging then 'is-dragging'
-      onClick: => store.mark 'mode', @props.name
-      onDragEnter: => store.mark 'dest', @props.name
+        if @state.dragOver then 'drag-to'
+        if @props.mode is @props.name then 'highlight'
+      onClick: @changeMode
+      onDragEnter: @onDragEnter
+      onDragLeave: @onDragLeave
+      onDragOver: @onDragOver
+      onDrop: @onDrop
       $.span
         className: 'count'
-        store.count @props.name
+        size
       @props.children

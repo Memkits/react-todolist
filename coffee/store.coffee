@@ -1,74 +1,61 @@
 
-events = require 'events'
 uid = require './util/uid'
 
-exports.store = store = new events.EventEmitter
+store = []
 
-store.data =
-  list: []
-  mode: 'todo' # 'later', 'done'
-  dragging: undefined
-  dest: undefined
+try
+  raw = localStorage.getItem 'react-todolist'
+  store = (JSON.parse raw) or []
 
-store.get = ->
-  @data
+window.onbeforeunload = ->
+  raw = JSON.stringify store
+  localStorage.setItem 'react-todolist', raw
 
-store.findIndex = (id) ->
-  for item, index in @data.list
+exports.emit = ->
+  console.log 'emit!'
+
+exports.get = ->
+  store
+
+exports.findIndex = (id) ->
+  for item, index in store
     if item.id is id
       return index
   throw new Error "item #{id} not found"
 
-store.findItem = (id) ->
+exports.findItem = (id) ->
   index = @findIndex id
-  @data.list[index]
+  store[index]
 
-store.remove = (id) ->
+exports.remove = (id) ->
   index = @findIndex id
-  @data.list.splice index, 1
-  @emit 'change'
+  store.splice index, 1
+  @emit()
 
-store.move = (id) ->
-  if @data.dest?
-    if @data.dest isnt @data.mode
-      index = @findIndex id
-      item = @data.list.splice(index, 1)[0]
-      item.mode = @data.dest
-      @data.list.unshift item
-      @emit 'change'
+exports.move = (id, dest) ->
+  index = @findIndex id
+  item = store.splice(index, 1)[0]
+  item.mode = dest
+  store.unshift item
+  @emit()
 
-store.sort = (dest) ->
-  if @data.dragging?
-    if @data.dragging isnt dest
-      a = @findIndex @data.dragging
-      b = @findIndex dest
-      d = @data.list
-      [d[a], d[b]] = [d[b], d[a]]
-      @emit 'change'
+exports.swap = (dest, dragging) ->
+  a = @findIndex dragging
+  b = @findIndex dest
+  d = store
+  [d[a], d[b]] = [d[b], d[a]]
+  @emit()
 
-store.add = ->
+exports.add = (mode) ->
   item =
     id: uid.make()
     text: ''
-    mode: @data.mode
+    mode: mode
 
-  @data.list.unshift item
-  @emit 'change'
+  store.unshift item
+  @emit()
 
-store.edit = (id, text) ->
+exports.edit = (id, text) ->
   item = @findItem id
   item.text = text
-  @emit 'change'
-
-store.count = (mode) ->
-  @data.list.filter (item) =>
-    item.mode is mode
-  .length
-
-store.mark = (key, id) ->
-  @data[key] = id
-  @emit 'change'
-
-store.unmark = (key) ->
-  @data[key] = undefined
-  @emit 'change'
+  @emit()

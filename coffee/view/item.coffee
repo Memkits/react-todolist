@@ -2,52 +2,62 @@
 React = require 'react'
 $ = React.DOM
 
-{store} = require '../store'
+store = require '../store'
+config = require '../config'
 
-exports.TodoItem = React.createClass
+module.exports = React.createClass
   displayName: 'TodoItem'
 
+  getInitialState: ->
+    dragging: no
+
   edit: (event) ->
-    text = event.currentTarget.value
-    store.edit @props.item.id, text
+    text = event.currentTarget.innerText
+    store.edit @props.data.id, text
 
   componentDidMount: ->
     el = @refs.input.getDOMNode()
-    if el.value.trim().length is 0
+    if el.innerText.trim().length is 0
       el.focus()
+
+  onDragStart: ->
+    @setState dragging: yes
+    @props.changeDragging @props.data.id
+
+  onDragEnd: ->
+    @setState dragging: no
+    @props.changeDragging null
+
+  onDragEnter: ->
+    if @props.dragging isnt @props.data.id
+      store.swap @props.data.id, @props.dragging
+
+  onKeyUp: (event) ->
+    store.edit @props.data.id, event.target.innerText
+
+  onBlur: (event) ->
+    text = event.target.innerText.trimLeft()
+    if text.length is 0
+      store.remove @props.data.id
+
+  onKeyDown: (event) ->
+    if event.keyCode is 27
+      @refs.input.getDOMNode().blur()
 
   render: ->
 
-    isDragging = @props.item.id is store.get().dragging
-
     $.div
-      className: $.if isDragging,
-        'todo-item dragging'
-        'todo-item'
-      onDragEnter: (event) =>
-        store.sort @props.item.id
-      $.input
-        className: 'todo-text'
-        ref: 'input'
-        value: @props.item.text
-        onChange: (event) =>
-          store.edit @props.item.id, event.target.value
-        onBlur: (event) =>
-          text = event.target.value.trimLeft()
-          if text.length is 0
-            store.remove @props.item.id
-        onKeyDown: (event) =>
-          if event.keyCode is 27
-            @blurEl()
-      $.div
-        className: 'drag'
-        draggable: yes
-        onDragStart: (event) =>
-          store.mark 'dragging', @props.item.id
-        onDragEnd: (event) =>
-          store.move @props.item.id
-          store.unmark 'dragging'
-          store.unmark 'dest'
-
-  blurEl: ->
-    @refs.input.getDOMNode().blur()
+      contentEditable: yes
+      draggable: yes
+      ref: 'input'
+      className: $.concat 'todo-item',
+        if @state.dragging then 'dragging'
+      onDragEnter: @onDragEnter
+      onDragStart: @onDragStart
+      onDragEnd: @onDragEnd
+      onKeyUp: @onKeyUp
+      onBlur: @onBlur
+      onKeyDown: @onKeyDown
+      style:
+        top: "#{config.oneHeight * @props.index}px"
+      @props.data.text

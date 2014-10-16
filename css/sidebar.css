@@ -1,0 +1,43 @@
+
+
+#sidebar {
+    width: 160px;
+}
+
+#sidebar > .dest {
+    font-size: 23px;
+    cursor: pointer;
+    color: rgb(35, 187, 95);
+    transition-duration: 300ms;
+    line-height: 60px;
+    transform-origin: center left;
+}
+
+#sidebar > .dest.highlight {
+    color: rgba(255, 227, 196, 1);
+}
+
+#sidebar > .highlight.is-dragging {
+    opacity: 0.2;
+}
+
+#sidebar > .dest > * {
+    pointer-events: none;
+}
+
+#sidebar > .dest:active {
+    box-shadow: 1px 1px 4px black;
+}
+
+#sidebar > .drag-to {
+    -webkit-transform: scale(1.2);
+}
+
+#sidebar > .drag-to.highlight {
+    -webkit-transform: scale(1);
+}
+
+#sidebar .count {
+    font-size: 40px;
+    margin-right: 13px;
+}
