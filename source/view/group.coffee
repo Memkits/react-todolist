@@ -4,7 +4,7 @@ $ = React.DOM
 
 store = require '../store'
 
-module.exports = React.createClass
+module.exports = React.createFactory React.createClass
   displayName: 'Group'
 
   changeMode: ->

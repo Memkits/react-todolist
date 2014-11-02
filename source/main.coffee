@@ -18,6 +18,6 @@ store = require './store'
 app = null
 store.emit = ->
   app = App data: store.get()
-  React.renderComponent app, document.body
+  React.render app, document.body
 
 store.emit()

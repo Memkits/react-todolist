@@ -8,7 +8,7 @@ Group = require './group'
 store = require '../store'
 config = require '../config'
 
-module.exports = React.createClass
+module.exports = React.createFactory React.createClass
   displayName: 'AppView'
 
   getInitialState: ->

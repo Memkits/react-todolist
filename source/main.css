@@ -8,12 +8,16 @@ body * {
 
 body {
     margin: 0;
-    font-family: "Helvetica Neue";
     background-size: cover;
-    font-weight: 100;
-    letter-spacing: 1px;
     -webkit-user-select: none;
     background-attachment: fixed;
+    background-image: url('http://jiyinyiyong.u.qiniudn.com/tulip.jpg');
+}
+
+body, input {
+    font-family: "Helvetica Neue";
+    font-weight: 100;
+    letter-spacing: 1px;
 }
 
 #app-view {

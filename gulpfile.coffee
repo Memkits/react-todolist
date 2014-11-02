@@ -9,11 +9,9 @@ libraries = [
 gulp.task 'folder', ->
   filetree = require 'make-filetree'
   filetree.make '.',
-    coffee:
+    source:
       'main.coffee': ''
-    css:
       'main.css': ''
-    cirru:
       'index.cirru': ''
     'README.md': ''
     build: {}
@@ -27,14 +25,14 @@ gulp.task 'watch', ->
   browserify = require 'browserify'
   rename = require 'gulp-rename'
 
-  watch glob: 'cirru/*', emitOnGlob: no, (files) ->
+  watch glob: 'source/**/*.cirru', emitOnGlob: no, (files) ->
     gulp
-    .src 'cirru/index.cirru'
+    .src 'source/index.cirru'
     .pipe plumber()
     .pipe html(data: {dev: yes})
     .pipe gulp.dest('./')
 
-  watch glob: 'coffee/**/*.coffee', emitOnGlob: no, (files) ->
+  watch glob: 'source/**/*.coffee', emitOnGlob: no, (files) ->
     files
     .pipe plumber()
     .pipe (coffee bare: yes)
@@ -60,14 +58,14 @@ gulp.task 'js', ->
 gulp.task 'coffee', ->
   coffee = require 'gulp-coffee'
   gulp
-  .src 'coffee/**/*.coffee', base: 'coffee/'
+  .src 'source/**/*.coffee', base: 'source/'
   .pipe (coffee bare: yes)
   .pipe (gulp.dest 'build/js/')
 
 gulp.task 'html', ->
   html = require 'gulp-cirru-html'
   gulp
-  .src 'cirru/*'
+  .src 'source/index.cirru'
   .pipe html(data: {dev: dev})
   .pipe gulp.dest('.')
 
@@ -83,7 +81,7 @@ gulp.task 'jsmin', ->
   .pipe source('main.min.js')
   .pipe buffer()
   .pipe uglify()
-  .pipe gulp.dest('dist/')
+  .pipe gulp.dest('build/')
 
 gulp.task 'vendor', ->
   source = require 'vinyl-source-stream'
@@ -97,16 +95,16 @@ gulp.task 'vendor', ->
   .pipe buffer()
   if dev
     jsbuffer
-    .pipe gulp.dest('dist/')
+    .pipe gulp.dest('build/')
   else
     jsbuffer
     .pipe uglify()
-    .pipe gulp.dest('dist/')
+    .pipe gulp.dest('build/')
 
 gulp.task 'prefixer', ->
   prefixer = require 'gulp-autoprefixer'
   gulp
-  .src 'css/**/*.css', base: 'css/'
+  .src 'source/**/*.css', base: 'source/'
   .pipe prefixer()
   .pipe gulp.dest('build/css/')
 
@@ -117,15 +115,19 @@ gulp.task 'cssmin', ->
   .src 'build/css/main.css'
   .pipe cssmin(root: 'build/css')
   .pipe rename(suffix: '.min')
-  .pipe gulp.dest('dist/')
+  .pipe gulp.dest('build/')
 
 gulp.task 'clean', (cb) ->
   del = require 'del'
-  del ['build/', 'dist/'], cb
+  del ['build/'], cb
+
+gulp.task 'start', ->
+  sequence = require 'run-sequence'
+  sequence 'clean', 'vendor'
 
 gulp.task 'dev', ->
   sequence = require 'run-sequence'
-  sequence 'clean', ['html', 'coffee', 'vendor'], 'js'
+  sequence ['html', 'coffee'], 'js'
 
 gulp.task 'build', ->
   dev = no
@@ -144,16 +146,15 @@ gulp.task 'rsync', ->
     dest: "tiye:~/repo/react-todolist"
     deleteAll: yes
     exclude: [
-      'bower_components/'
       'node_modules/'
-      'cirru/'
+      'README.md'
+      'data/'
+      'build/js/'
+      'build/css/'
+      '*.json'
       '.gitignore'
       '.npmignore'
-      'README.md'
-      'coffee/'
-      'build/'
       'gulpfile.coffee'
-      '*.json'
     ]
   , (error, stdout, stderr, cmd) ->
     if error? then throw error

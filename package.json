@@ -22,7 +22,7 @@
     "gulp-wait": "0.0.2",
     "gulp-watch": "^0.6.9",
     "make-filetree": "0.0.2",
-    "react": "^0.11.1",
+    "react": "0.12.*",
     "rsyncwrapper": "^0.4.1",
     "run-sequence": "^0.3.6",
     "vinyl-buffer": "0.0.0",
