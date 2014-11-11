@@ -21,7 +21,6 @@ module.exports = React.createFactory React.createClass
       el.focus()
 
   onDragStart: (event) ->
-    event.target.select()
     @setState dragging: yes
     @props.changeDragging @props.data.id
 
@@ -47,17 +46,18 @@ module.exports = React.createFactory React.createClass
 
   render: ->
 
-    $.input
+    $.div
       draggable: yes
-      ref: 'input'
       className: $.concat 'todo-item',
         if @state.dragging then 'dragging'
       onDragEnter: @onDragEnter
       onDragStart: @onDragStart
       onDragEnd: @onDragEnd
-      onChange: @onChange
-      onBlur: @onBlur
-      onKeyDown: @onKeyDown
       style:
         top: "#{config.oneHeight * @props.index}px"
-      value: @props.data.text
+      $.input
+        ref: 'input'
+        onChange: @onChange
+        onBlur: @onBlur
+        onKeyDown: @onKeyDown
+        value: @props.data.text

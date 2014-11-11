@@ -1,6 +1,7 @@
 
 gulp = require 'gulp'
 
+project = 'react-todolist'
 dev = yes
 libraries = [
   'react'
@@ -24,6 +25,8 @@ gulp.task 'watch', ->
   transform = require 'vinyl-transform'
   browserify = require 'browserify'
   rename = require 'gulp-rename'
+  reloader = require 'gulp-reloader'
+  reloader.listen()
 
   watch glob: 'source/**/*.cirru', emitOnGlob: no, (files) ->
     gulp
@@ -31,6 +34,7 @@ gulp.task 'watch', ->
     .pipe plumber()
     .pipe html(data: {dev: yes})
     .pipe gulp.dest('./')
+    .pipe reloader(project)
 
   watch glob: 'source/**/*.coffee', emitOnGlob: no, (files) ->
     files
@@ -43,6 +47,7 @@ gulp.task 'watch', ->
       b.external library for library in libraries
       b.bundle()
     .pipe gulp.dest('build/')
+    .pipe reloader(project)
     return files
 
 gulp.task 'js', ->
@@ -143,7 +148,7 @@ gulp.task 'rsync', ->
     src: '.'
     recursive: true
     args: ['--verbose']
-    dest: "tiye:~/repo/react-todolist"
+    dest: "tiye:~/repo/#{project}"
     deleteAll: yes
     exclude: [
       'node_modules/'
