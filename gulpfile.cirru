@@ -5,9 +5,9 @@ var
   exec $ . (require :child_process) :exec
   env $ object
     :dev true
-    :main :http://192.168.0.129:8080/build/main.js
-    :vendor :http://192.168.0.129:8080/build/vendor.js
-    :style :http://192.168.0.129:8080/build/style.css
+    :main :http://repo:8080/build/main.js
+    :vendor :http://repo:8080/build/vendor.js
+    :style :http://repo:8080/build/style.css
 
 gulp.task :rsync $ \ (cb)
   var

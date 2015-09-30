@@ -16,9 +16,9 @@ require :actions-recorder/style/actions-recorder.css
 
 var initialStore schema.store
 
--- try
+try
   do
-    var raw $ localStorage.getItem :pudica
+    var raw $ localStorage.getItem :react-todolist
     var data $ JSON.parse (or raw :[])
     = initialStore $ ...
       Immutable.fromJS (or data ([]))
@@ -27,7 +27,7 @@ var initialStore schema.store
 
 -- = window.onbeforeunload $ \ ()
   var raw $ JSON.stringify (recorder.getState)
-  localStorage.setItem :pudica raw
+  localStorage.setItem :react-todolist-dev raw
 
 recorder.setup $ {}
   :initial initialStore
