@@ -20,15 +20,26 @@ var modes $ [] :todo :later :done
   :propTypes $ {}
     :store $ . (React.PropTypes.instanceOf Immutable.List) :isRequired
 
+  :getInitialState $ \ ()
+    {} (:mode :todo)
+
+  :onModeChange $ \ (mode)
+    @setState $ {} (:mode mode)
+
   :render $ \ ()
     div ({} (:style $ @styleRoot))
       div
         {} (:style $ @styleModes)
-        modes.map $ \ (mode)
+        modes.map $ \\ (mode)
           Mode $ {} (:mode mode) (:key mode)
+            :isActive $ is mode @state.mode
+            :onClick @onModeChange
       div ({} (:style $ @styleList))
-        @props.store.map $ \ (task)
-          Task $ {} (:task task) (:key $ task.get :id)
+        ... @props.store
+          filter $ \\ (task)
+            is (task.get :mode) @state.mode
+          map $ \ (task)
+            Task $ {} (:task task) (:key $ task.get :id)
 
   :styleRoot $ \ ()
     {} (:width ":100%") (:height ":100%") (:position :absolute)
@@ -37,17 +48,15 @@ var modes $ [] :todo :later :done
       :backgroundImage $ + ":url(" bg ":)"
       :backgroundSize :cover
       :backgroundPosition ":center center"
-      :display :flex
-      :flexDirection :row
-      :justifyContent :center
-      :alignItems :flex-start
+      :padding ":40px 200px"
 
   :styleModes $ \ ()
     {}
-      :width :20%
+      :display :flex
+      :flexDirection :row
+      :justifyContent :flex-end
 
   :styleList $ \ ()
     {}
-      :width :60%
       :height :100%
       :overflow :auto

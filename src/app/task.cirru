@@ -80,7 +80,6 @@ var
         :outline :none
         :border :none
         :display :block
-        :width 600
         :fontSize :14px
       cond @state.isTouching
         {}
