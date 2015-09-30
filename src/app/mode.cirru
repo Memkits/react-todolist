@@ -34,6 +34,7 @@ var
         :textAlign :center
         :width :160px
         :cursor :pointer
+        :transitionDuration :300ms
       cond @props.isActive
         {}
           :fontSize 20

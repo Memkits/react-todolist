@@ -8,7 +8,7 @@ var
 = module.exports $ {}
   :entry $ {}
     :main $ [] :./src/main
-    :vendor $ []
+    :vendor $ [] :react :immutable
 
   :output $ {}
     :path :build/

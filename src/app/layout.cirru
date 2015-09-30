@@ -5,6 +5,9 @@ var
   Immutable $ require :immutable
 
 var
+  configs $ require :../configs
+
+var
   bg $ require :../../png/tulip.jpg
   Mode $ React.createFactory $ require :./mode
   Task $ React.createFactory $ require :./task
@@ -23,10 +26,18 @@ var modes $ [] :todo :later :done
   :getInitialState $ \ ()
     {} (:mode :todo)
 
+  :getVisibleTasks $ \ ()
+    ... @props.store
+      filter $ \\ (task)
+        is (task.get :mode) @state.mode
+
   :onModeChange $ \ (mode)
     @setState $ {} (:mode mode)
 
   :render $ \ ()
+    var
+      visibleTasks (@getVisibleTasks)
+
     div ({} (:style $ @styleRoot))
       div
         {} (:style $ @styleModes)
@@ -36,10 +47,11 @@ var modes $ [] :todo :later :done
             :onClick @onModeChange
       div ({} (:style $ @styleList))
         ... @props.store
-          filter $ \\ (task)
-            is (task.get :mode) @state.mode
-          map $ \ (task)
-            Task $ {} (:task task) (:key $ task.get :id)
+          map $ \\ (task)
+            var index
+              visibleTasks.indexOf task
+            Task $ {} (:task task) (:key $ task.get :id) (:index index)
+              :isShown $ is (task.get :mode) @state.mode
 
   :styleRoot $ \ ()
     {} (:width ":100%") (:height ":100%") (:position :absolute)
@@ -55,8 +67,12 @@ var modes $ [] :todo :later :done
       :display :flex
       :flexDirection :row
       :justifyContent :flex-end
+      :marginBottom 40
 
   :styleList $ \ ()
+    var
+      visibleTasks (@getVisibleTasks)
     {}
-      :height :100%
-      :overflow :auto
+      :overflow :visible
+      :position :relative
+      :height $ * (+ configs.height configs.space) visibleTasks.size

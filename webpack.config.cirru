@@ -8,6 +8,7 @@ var
     :vendor $ []
       , :webpack-dev-server/client?http://repo:8080
       , :webpack/hot/dev-server
+      , :react :immutable
     :main $ [] :./src/main
 
   :output $ {}
@@ -22,6 +23,7 @@ var
     :loaders $ []
       {} (:test /\.cirru$) (:loader :react-hot!cirru-script) (:ignore /node_modules)
       {} (:test "/\.(png|jpg|gif)$") (:loader :url-loader)
+        :query $ {} (:limit 100)
       {} (:test /\.css$) $ :loader :style!css!autoprefixer
       {} (:test /\.json$) $ :loader :json
 

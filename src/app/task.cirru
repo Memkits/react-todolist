@@ -6,6 +6,7 @@ var
   Immutable $ require :immutable
 
 var
+  configs $ require :../configs
   actions $ require :../actions
 
 var
@@ -16,12 +17,14 @@ var
 
   :propTypes $ {}
     :task $ . (React.PropTypes.instanceOf Immutable.Map) :isRequired
+    :index React.PropTypes.number.isRequired
+    :isShown React.PropTypes.bool.isRequired
 
   :getInitialState $ \ ()
     {}
       :isEditing false
       :diffY 0
-      isTouching false
+      :isTouching false
 
   :componentWillMount $ \ ()
     = @private $ {}
@@ -40,20 +43,20 @@ var
   :onTouchStart $ \ (event)
     var touch $ . event.touches 0
     = @private $ {}
-      :acc 0
       :y touch.screenY
+      :x touch.screenX
+      :index @props.index
     @setState $ {} (:isTouching true)
 
   :onTouchEnd $ \ (event)
-    var touch $ . event.touches 0
-    = @private.acc @state.diffY
-    @setState $ {} (:isTouching false) (:diffY 0)
+    @setState $ {} (:isTouching false) (:diffY 0) (:diffX 0)
 
   :onTouchMove $ \ (event)
     event.preventDefault
     var touch $ . event.touches 0
     @setState $ {}
-      :diffY $ + @private.acc $ - touch.screenY @private.y
+      :diffY $ - touch.screenY @private.y
+      :diffX $ - touch.screenX @private.x
 
   :render $ \ ()
     cond @state.isEditing
@@ -69,11 +72,18 @@ var
         @props.task.get :text
 
   :styleRoot $ \ ()
+    var top $ cond @props.isShown
+      cond @state.isTouching
+        +
+          * @props.index configs.step
+          , @state.diffY
+        * @props.index configs.step
+      , 0
     assign
       {}
         :color :white
         :fontFamily ":Verdana, sans-serif"
-        :backgroundColor $ ... (Color) (hsl 0 60 40 0.5) (hslString)
+        :width :100%
         :lineHeight :40px
         :marginTop 20
         :padding ":0 20px"
@@ -81,10 +91,21 @@ var
         :border :none
         :display :block
         :fontSize :14px
+        :position :absolute
+        :top top
+        :left @state.diffX
+      cond @props.isShown
+        {}
+          :opacity 1
+        {}
+          :opacity 0.1
       cond @state.isTouching
         {}
-          :transform $ + ":translate(0px, " @state.diffY :px ":)"
           :transitionDuration :0ms
         {}
-          :transform $ + ":translate(0px, 0px)"
           :transitionDuration :400ms
+      cond @state.isEditing
+        {}
+          :backgroundColor $ ... (Color) (hsl 0 60 20 0.5) (hslString)
+        {}
+          :backgroundColor $ ... (Color) (hsl 0 60 40 0.5) (hslString)
