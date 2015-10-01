@@ -16,4 +16,6 @@ var
       todo.swap store actionData
     :clear
       todo.clear store
+    :top
+      todo.top store actionData
     else store

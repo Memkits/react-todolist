@@ -13,6 +13,7 @@ var
   bg $ require :../../png/tulip.jpg
   Mode $ React.createFactory $ require :./mode
   Task $ React.createFactory $ require :./task
+  Editor $ React.createFactory $ require :./editor
 
 var
   ({}~ div) React.DOM
@@ -26,7 +27,7 @@ var modes $ [] :todo :later :done
     :store $ . (React.PropTypes.instanceOf Immutable.List) :isRequired
 
   :getInitialState $ \ ()
-    {} (:mode :todo)
+    {} (:mode :todo) (:showEditor false) (:editingTask null)
 
   :componentDidMount $ \ ()
     window.addEventListener :keydown @onWindowKeydown
@@ -61,6 +62,32 @@ var modes $ [] :todo :later :done
   :onClear $ \ ()
     actions.clear
 
+  :onTaskView $ \ (id)
+    @setState $ {}
+      :editingTask id
+      :showEditor true
+
+  :onEditorClose $ \ ()
+    @setState $ {}
+      :showEditor false
+
+  :renderEditor $ \ ()
+    var
+      task $ @props.store.find $ \\ (task)
+        is (task.get :id) @state.editingTask
+      mode $ task.get :mode
+      visibleTasks $ @props.store.filter $ \ (task)
+        is (task.get :mode) mode
+      taskIds $ visibleTasks.map $ \ (task)
+        task.get :id
+      index $ taskIds.indexOf (task.get :id)
+      atTop $ is index 0
+
+    Editor $ {}
+      :task task
+      :showTop $ not atTop
+      :onClose @onEditorClose
+
   :render $ \ ()
     var
       visibleTasks (@getVisibleTasks)
@@ -80,11 +107,15 @@ var modes $ [] :todo :later :done
             Task $ {} (:task task) (:key $ task.get :id) (:index index)
               :isShown $ is (task.get :mode) @state.mode
               :onOrder @onOrder
+              :onContextMenu @onTaskView
           sortBy $ \ (el) el.key
       cond
         and (is @state.mode :done) (> visibleTasks.size 0)
         div ({} (:style $ @styleControl))
           div ({} (:style $ @styleClear) (:onClick @onClear)) :clear
+        , undefined
+      cond @state.showEditor
+        @renderEditor
         , undefined
 
   :styleRoot $ \ ()
@@ -94,7 +125,7 @@ var modes $ [] :todo :later :done
       :backgroundImage $ + ":url(" bg ":)"
       :backgroundSize :cover
       :backgroundPosition ":center center"
-      :padding ":40px 200px"
+      :padding $ cond (> window.innerWidth 800) ":40px 200px" 0
 
   :styleModes $ \ ()
     {}

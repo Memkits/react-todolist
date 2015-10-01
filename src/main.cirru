@@ -25,7 +25,7 @@ try
       filter $ \ (item) (? item)
   err
 
--- = window.onbeforeunload $ \ ()
+= window.onbeforeunload $ \ ()
   var raw $ JSON.stringify (recorder.getState)
   localStorage.setItem :react-todolist-dev raw
 

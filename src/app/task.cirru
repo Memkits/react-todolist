@@ -26,6 +26,7 @@ var getBasePosition $ \ (mode)
     :index React.PropTypes.number.isRequired
     :isShown React.PropTypes.bool.isRequired
     :onOrder React.PropTypes.func.isRequired
+    :onContextMenu React.PropTypes.func.isRequired
 
   :getInitialState $ \ ()
     {}
@@ -80,6 +81,10 @@ var getBasePosition $ \ (mode)
         @props.onOrder (@props.task.get :id) @props.index offsetY
     , undefined
 
+  :onContextMenu $ \ (event)
+    @props.onContextMenu $ @props.task.get :id
+    event.preventDefault
+
   :render $ \ ()
     input
       {} (:ref input) (:style $ @styleRoot)
@@ -90,6 +95,7 @@ var getBasePosition $ \ (mode)
         :onTouchStart @onTouchStart
         :onTouchMove @onTouchMove
         :onTouchEnd @onTouchEnd
+        :onContextMenu @onContextMenu
 
   :styleRoot $ \ ()
     var top $ cond @props.isShown

@@ -45,3 +45,12 @@ var
 = exports.clear $ \ (store actionData)
   store.filterNot $ \ (task)
     is (task.get :mode) :done
+
+= exports.top $ \ (store id)
+  var
+    task $ store.find $ \ (task)
+      is (task.get :id) id
+    rest $ store.filterNot $ \ (task)
+      is (task.get :id) id
+  rest.unshift task
+

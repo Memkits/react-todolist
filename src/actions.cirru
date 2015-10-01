@@ -28,3 +28,6 @@ var
 
 = exports.clear $ \ ()
   recorder.dispatch :clear
+
+= exports.top $ \ (id)
+  recorder.dispatch :top id
