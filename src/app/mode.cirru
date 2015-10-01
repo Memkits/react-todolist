@@ -5,7 +5,7 @@ var
   assign $ require :object-assign
 
 var
-  ({}~ div) React.DOM
+  ({}~ div span) React.DOM
 
 = module.exports $ React.createClass $ {}
   :displayName :app-mode
@@ -14,6 +14,7 @@ var
     :mode React.PropTypes.string.isRequired
     :isActive React.PropTypes.bool.isRequired
     :onClick React.PropTypes.func.isRequired
+    :count React.PropTypes.number.isRequired
 
   :onClick $ \ ()
     @props.onClick @props.mode
@@ -22,6 +23,7 @@ var
     div
       {} (:style $ @styleRoot) (:onClick @onClick)
       , @props.mode
+      span ({} (:style $ @styleNumber)) @props.count
 
   :styleRoot $ \ ()
     assign
@@ -40,3 +42,9 @@ var
           :backgroundColor $ ... (Color) (hsl 0 60 30 0.3) (hslString)
         {}
           :backgroundColor $ ... (Color) (hsl 0 60 30 0.1) (hslString)
+
+  :styleNumber $ \ ()
+    {}
+      :fontSize :12px
+      :marginLeft :10px
+      :color $ ... (Color) (hsl 0 100 100 0.5) (hslString)

@@ -96,9 +96,12 @@ var modes $ [] :todo :later :done
       div
         {} (:style $ @styleModes)
         modes.map $ \\ (mode)
+          var tasksOfMode $ @props.store.filter $ \ (task)
+            is (task.get :mode) mode
           Mode $ {} (:mode mode) (:key mode)
             :isActive $ is mode @state.mode
             :onClick @onModeChange
+            :count tasksOfMode.size
       div ({} (:style $ @styleList))
         ... @props.store
           map $ \\ (task)

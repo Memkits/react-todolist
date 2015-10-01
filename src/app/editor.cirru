@@ -7,6 +7,7 @@ var
 
 var
   actions $ require :../actions
+  baseStyle $ require :../style/base
 
 var
   ({}~ div input) React.DOM
@@ -78,7 +79,7 @@ var
       :height :40px
       :lineHeight :40px
       :fontSize :16px
-      :fontFamily ":Verdana, Helvetica, sans-serif"
+      :fontFamily baseStyle.font
       :backgroundColor $ ... (Color) (hsl 0 30 40 0.3) (hslString)
       :border :none
       :outline :none

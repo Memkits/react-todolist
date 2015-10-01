@@ -15,10 +15,10 @@ gulp.task :rsync $ \ (cb)
   wrapper.rsync
     object
       :ssh true
-      :src $ array :index.html :build
+      :src $ array :index.html :build :png
       :recursive true
       :args $ array :--verbose
-      :dest :tiye:~/repo/workflow/
+      :dest :tiye:~/repo/react-todolist/
       :deleteAll true
     \ (error stdout stderr cmd)
       if (? error)

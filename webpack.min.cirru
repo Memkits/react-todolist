@@ -13,6 +13,7 @@ var
   :output $ {}
     :path :build/
     :filename :[name].[chunkhash:8].js
+    :publicPath :build/
 
   :resolve config.resolve
   :module $ {}

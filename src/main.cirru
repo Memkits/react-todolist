@@ -11,14 +11,13 @@ var
 var
   Page $ React.createFactory $ require :./app/page
 
-require :../style/main.css
 require :actions-recorder/style/actions-recorder.css
 
 var initialStore schema.store
 
 try
   do
-    var raw $ localStorage.getItem :react-todolist-dev
+    var raw $ localStorage.getItem :react-todolist
     var data $ JSON.parse (or raw :[])
     = initialStore $ ...
       Immutable.fromJS (or data ([]))
@@ -27,7 +26,7 @@ try
 
 = window.onbeforeunload $ \ ()
   var raw $ JSON.stringify (recorder.getState)
-  localStorage.setItem :react-todolist-dev raw
+  localStorage.setItem :react-todolist raw
 
 recorder.setup $ {}
   :initial initialStore

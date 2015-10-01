@@ -8,6 +8,7 @@ var
 var
   configs $ require :../configs
   actions $ require :../actions
+  baseStyle $ require :../style/base
 
 var
   ({}~ div input) React.DOM
@@ -106,7 +107,7 @@ var getBasePosition $ \ (mode)
     assign
       {}
         :color :white
-        :fontFamily ":Verdana, sans-serif"
+        :fontFamily baseStyle.font
         :width :100%
         :lineHeight :40px
         :height :40px
@@ -120,6 +121,8 @@ var getBasePosition $ \ (mode)
         :top top
         :left $ cond @props.isShown @state.diffX 0
         :backgroundColor $ ... (Color) (hsl 0 40 40 0.4) (hslString)
+        :transitionTimingFunction :linear
+        :will-change ":transform, opacity, top"
       cond @props.isShown
         {}
           :opacity 1
