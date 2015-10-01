@@ -6,6 +6,7 @@ var
 
 var
   configs $ require :../configs
+  actions $ require :../actions
 
 var
   bg $ require :../../png/tulip.jpg
@@ -34,6 +35,20 @@ var modes $ [] :todo :later :done
   :onModeChange $ \ (mode)
     @setState $ {} (:mode mode)
 
+  :onOrder $ \ (id index diffY)
+    var
+      steps $ cond (> diffY 0)
+        Math.floor (/ diffY configs.step)
+        Math.ceil (/ diffY configs.step)
+      visibleTasks (@getVisibleTasks)
+      target $ visibleTasks.get $ + index steps
+    if (? target) $ do
+      actions.swap id (target.get :id)
+    , undefined
+
+  :onMove $ \ (id diffX)
+    console.log diffX
+
   :render $ \ ()
     var
       visibleTasks (@getVisibleTasks)
@@ -52,6 +67,9 @@ var modes $ [] :todo :later :done
               visibleTasks.indexOf task
             Task $ {} (:task task) (:key $ task.get :id) (:index index)
               :isShown $ is (task.get :mode) @state.mode
+              :onOrder @onOrder
+              :onMove @onMove
+          sortBy $ \ (el) el.key
 
   :styleRoot $ \ ()
     {} (:width ":100%") (:height ":100%") (:position :absolute)

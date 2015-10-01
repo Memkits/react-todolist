@@ -28,6 +28,9 @@ var
 
   :componentWillMount $ \ ()
     = @private $ {}
+      :initialX null
+      :initialY null
+      :index @props.index
 
   :onClick $ \ (event)
     @setState
@@ -43,20 +46,31 @@ var
   :onTouchStart $ \ (event)
     var touch $ . event.touches 0
     = @private $ {}
-      :y touch.screenY
-      :x touch.screenX
-      :index @props.index
+      :initialTop $ * @props.index configs.step
+      :initialY touch.screenY
+      :initialX touch.screenX
     @setState $ {} (:isTouching true)
 
   :onTouchEnd $ \ (event)
     @setState $ {} (:isTouching false) (:diffY 0) (:diffX 0)
+    if (> (Math.abs @state.diffX) configs.distance)
+      do
+        @props.onMove (@props.task.get :id) @state.diffX
+    , undefined
 
   :onTouchMove $ \ (event)
     event.preventDefault
-    var touch $ . event.touches 0
-    @setState $ {}
-      :diffY $ - touch.screenY @private.y
-      :diffX $ - touch.screenX @private.x
+    var
+      touch $ . event.touches 0
+      diffY $ - touch.screenY @private.initialY
+      diffX $ - touch.screenX @private.initialX
+      offsetY $ - (+ diffY @private.initialTop) $ * @props.index configs.step
+
+    @setState $ {} (:diffX diffX) (:diffY diffY)
+    if (> (Math.abs offsetY) configs.step)
+      do
+        @props.onOrder (@props.task.get :id) @props.index offsetY
+    , undefined
 
   :render $ \ ()
     cond @state.isEditing
@@ -64,6 +78,7 @@ var
         {} (:ref input) (:style $ @styleRoot) (:onBlur @onBlur)
           :onChange @onChange
           :value $ @props.task.get :text
+          :autoFocus true
       div
         {} (:style $ @styleRoot) (:onClick @onClick)
           :onTouchStart @onTouchStart
@@ -74,9 +89,7 @@ var
   :styleRoot $ \ ()
     var top $ cond @props.isShown
       cond @state.isTouching
-        +
-          * @props.index configs.step
-          , @state.diffY
+        + @private.initialTop @state.diffY
         * @props.index configs.step
       , 0
     assign
