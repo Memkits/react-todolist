@@ -30,13 +30,13 @@ var
         :fontFamily ":Verdana, sans-serif"
         :marginLeft 20
         :lineHeight :40px
-        :backgroundColor $ ... (Color) (hsl 0 60 30 0.2) (hslString)
         :textAlign :center
         :width :160px
         :cursor :pointer
         :transitionDuration :300ms
+        :fontSize 14
       cond @props.isActive
         {}
-          :fontSize 20
+          :backgroundColor $ ... (Color) (hsl 0 60 30 0.3) (hslString)
         {}
-          :fontSize 14
+          :backgroundColor $ ... (Color) (hsl 0 60 30 0.1) (hslString)

@@ -2,6 +2,7 @@
 var
   Color $ require :color
   React $ require :react
+  keycode $ require :keycode
   Immutable $ require :immutable
 
 var
@@ -27,6 +28,12 @@ var modes $ [] :todo :later :done
   :getInitialState $ \ ()
     {} (:mode :todo)
 
+  :componentDidMount $ \ ()
+    window.addEventListener :keydown @onWindowKeydown
+
+  :componentWillUnmount $ \ ()
+    window.removeEventListener :keydown @onWindowKeydown
+
   :getVisibleTasks $ \ ()
     ... @props.store
       filter $ \\ (task)
@@ -46,8 +53,13 @@ var modes $ [] :todo :later :done
       actions.swap id (target.get :id)
     , undefined
 
-  :onMove $ \ (id diffX)
-    console.log diffX
+  :onWindowKeydown $ \ (event)
+    if (is (keycode event.keyCode) :enter) $ do
+      actions.add @state.mode
+    , undefined
+
+  :onClear $ \ ()
+    actions.clear
 
   :render $ \ ()
     var
@@ -68,8 +80,12 @@ var modes $ [] :todo :later :done
             Task $ {} (:task task) (:key $ task.get :id) (:index index)
               :isShown $ is (task.get :mode) @state.mode
               :onOrder @onOrder
-              :onMove @onMove
           sortBy $ \ (el) el.key
+      cond
+        and (is @state.mode :done) (> visibleTasks.size 0)
+        div ({} (:style $ @styleControl))
+          div ({} (:style $ @styleClear) (:onClick @onClear)) :clear
+        , undefined
 
   :styleRoot $ \ ()
     {} (:width ":100%") (:height ":100%") (:position :absolute)
@@ -93,4 +109,22 @@ var modes $ [] :todo :later :done
     {}
       :overflow :visible
       :position :relative
-      :height $ * (+ configs.height configs.space) visibleTasks.size
+      :height $ * configs.step (+ visibleTasks.size 1)
+      :transitionDuration :300ms
+
+  :styleControl $ \ ()
+    {}
+      :display :flex
+      :flexDirection :row
+      :justifyContent :flex-end
+
+  :styleClear $ \ ()
+    {}
+      :color :white
+      :backgroundColor $ ... (Color) (hsl 0 30 50 0.5) (hslString)
+      :width :100px
+      :lineHeight :40px
+      :textAlign :center
+      :fontSize :14px
+      :fontFamily ":Verdana, Helvetica, sans-serif"
+      :cursor :pointer

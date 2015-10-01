@@ -12,6 +12,12 @@ var
 var
   ({}~ div input) React.DOM
 
+var getBasePosition $ \ (mode)
+  case mode
+    :todo 0
+    :later 100
+    :done 200
+
 = module.exports $ React.createClass $ {}
   :displayName :app-task
 
@@ -19,10 +25,10 @@ var
     :task $ . (React.PropTypes.instanceOf Immutable.Map) :isRequired
     :index React.PropTypes.number.isRequired
     :isShown React.PropTypes.bool.isRequired
+    :onOrder React.PropTypes.func.isRequired
 
   :getInitialState $ \ ()
     {}
-      :isEditing false
       :diffY 0
       :isTouching false
 
@@ -32,13 +38,10 @@ var
       :initialY null
       :index @props.index
 
-  :onClick $ \ (event)
-    @setState
-      {} (:isEditing true)
-
   :onBlur $ \ (event)
-    @setState $ {}
-      :isEditing false
+    if (is event.target.value :) $ do
+      actions.remove $ @props.task.get :id
+    , undefined
 
   :onChange $ \ (event)
     actions.edit (@props.task.get :id) event.target.value
@@ -52,10 +55,15 @@ var
     @setState $ {} (:isTouching true)
 
   :onTouchEnd $ \ (event)
+    var position $ +
+      getBasePosition $ @props.task.get :mode
+      or @state.diffX 0
+    var mode $ case true
+      (< position 50) :todo
+      (<= position 150) :later
+      (>= position 150) :done
+    actions.move (@props.task.get :id) mode
     @setState $ {} (:isTouching false) (:diffY 0) (:diffX 0)
-    if (> (Math.abs @state.diffX) configs.distance)
-      do
-        @props.onMove (@props.task.get :id) @state.diffX
     , undefined
 
   :onTouchMove $ \ (event)
@@ -73,31 +81,29 @@ var
     , undefined
 
   :render $ \ ()
-    cond @state.isEditing
-      input
-        {} (:ref input) (:style $ @styleRoot) (:onBlur @onBlur)
-          :onChange @onChange
-          :value $ @props.task.get :text
-          :autoFocus true
-      div
-        {} (:style $ @styleRoot) (:onClick @onClick)
-          :onTouchStart @onTouchStart
-          :onTouchMove @onTouchMove
-          :onTouchEnd @onTouchEnd
-        @props.task.get :text
+    input
+      {} (:ref input) (:style $ @styleRoot)
+        :onChange @onChange
+        :onBlur @onBlur
+        :value $ @props.task.get :text
+        :autoFocus $ is (. (@props.task.get :text) :length) 0
+        :onTouchStart @onTouchStart
+        :onTouchMove @onTouchMove
+        :onTouchEnd @onTouchEnd
 
   :styleRoot $ \ ()
     var top $ cond @props.isShown
       cond @state.isTouching
         + @private.initialTop @state.diffY
         * @props.index configs.step
-      , 0
+      - 0 configs.step
     assign
       {}
         :color :white
         :fontFamily ":Verdana, sans-serif"
         :width :100%
         :lineHeight :40px
+        :height :40px
         :marginTop 20
         :padding ":0 20px"
         :outline :none
@@ -106,19 +112,15 @@ var
         :fontSize :14px
         :position :absolute
         :top top
-        :left @state.diffX
+        :left $ cond @props.isShown @state.diffX 0
+        :backgroundColor $ ... (Color) (hsl 0 40 40 0.4) (hslString)
       cond @props.isShown
         {}
           :opacity 1
         {}
-          :opacity 0.1
+          :opacity 0
       cond @state.isTouching
         {}
           :transitionDuration :0ms
         {}
-          :transitionDuration :400ms
-      cond @state.isEditing
-        {}
-          :backgroundColor $ ... (Color) (hsl 0 60 20 0.5) (hslString)
-        {}
-          :backgroundColor $ ... (Color) (hsl 0 60 40 0.5) (hslString)
+          :transitionDuration :300ms

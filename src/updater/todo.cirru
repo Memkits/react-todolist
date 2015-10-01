@@ -2,14 +2,17 @@
 var
   schema $ require :../schema
 
-= exports.add $ \ (store id)
-  store.unshift $ schema.set :id id
+= exports.add $ \ (store actionData)
+  store.unshift $ schema.task.merge actionData
 
 = exports.remove $ \ (store id)
   store.filterNot $ \ (task)
     is (task.get :id) id
 
-= exports.move $ \ (id mode)
+= exports.move $ \ (store actionData)
+  var
+    id $ actionData.get :id
+    mode $ actionData.get :mode
   store.map $ \ (task)
     cond (is (task.get :id) id)
       task.set :mode mode
@@ -38,3 +41,7 @@ var
     cond (is (task.get :id) id)
       task.set :text text
       , task
+
+= exports.clear $ \ (store actionData)
+  store.filterNot $ \ (task)
+    is (task.get :mode) :done

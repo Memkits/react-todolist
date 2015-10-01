@@ -18,7 +18,7 @@ var initialStore schema.store
 
 try
   do
-    var raw $ localStorage.getItem :react-todolist
+    var raw $ localStorage.getItem :react-todolist-dev
     var data $ JSON.parse (or raw :[])
     = initialStore $ ...
       Immutable.fromJS (or data ([]))
